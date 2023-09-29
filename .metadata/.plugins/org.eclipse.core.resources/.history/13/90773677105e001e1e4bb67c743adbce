@@ -1,0 +1,51 @@
+/*
+ * main.c
+ *
+ *  Created on: 28-Sep-2023
+ *      Author: wardawg
+ */
+
+
+/*
+ * Include all the header files needed for main
+ */
+
+#include "stm32f4xx.h"
+#include "stdio.h"
+#include "string.h"
+
+/*
+ * Here, we define all the peripheral handlers
+ */
+
+GPIO_InitTypeDef led;
+
+
+
+
+/*
+ * Here, we write the prototypes for the functions to be defined in the file
+ */
+void led_init();
+
+
+
+
+
+int main(){
+	while (1);
+	return 0;
+}
+
+
+
+void led_init(){
+
+	__HAL_RCC_GPIOD_CLK_ENABLE();
+	led.Mode = GPIO_MODE_OUTPUT_OD;
+	led.Pull = GPIO_NOPULL;
+	led.Speed = GPIO_SPEED_FAST;
+	led.Pin = GPIO_PIN_12;
+	HAL_GPIO_Init(GPIOD, &led);
+
+}

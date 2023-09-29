@@ -1,0 +1,10 @@
+13:35:12 **** Incremental Build of configuration Debug for project LED_PIN_401 ****
+make -j12 all 
+arm-none-eabi-size   LED_PIN_401.elf 
+   text	   data	    bss	    dec	    hex	filename
+   5592	     20	   1572	   7184	   1c10	LED_PIN_401.elf
+Finished building: default.size.stdout
+ 
+
+13:35:12 Build Finished. 0 errors, 0 warnings. (took 252ms)
+

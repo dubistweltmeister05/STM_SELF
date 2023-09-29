@@ -1,0 +1,30 @@
+/*
+ * it.h
+ *
+ *  Created on: 28-Sep-2023
+ *      Author: wardawg
+ */
+
+#ifndef IT_H_
+#define IT_H_
+
+/*
+ * Include all the header files needed for main
+ */
+
+#include "stm32f4xx.h"
+#include "stdio.h"
+#include "string.h"
+
+
+
+
+
+
+
+
+void main(){
+	while (1);
+}
+
+#endif /* IT_H_ */
