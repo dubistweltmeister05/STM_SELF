@@ -1,0 +1,168 @@
+/*
+ * stm32f407_spi_driver.c
+ *
+ *  Created on: Oct 6, 2023
+ *      Author: wardawg
+ */
+
+#include "stm32f407xx.h"
+#include "stm32f407_spi_driver.h"
+
+
+/**********************************************************************************************
+ * 								SPI_PeriClockControl
+ *
+ * 	@brief					   - Used to turn the clock on or off
+ *
+ *
+ * 	@param					   - pSPIx, the pointer to the regDef Structure
+ * 	@param					   - EnordDi, the ENABLE or DISABLE MACRO
+ * 	@param					   -
+ *
+ *
+ * 	@return					   -
+ *
+ * 	@NOTE					   -
+ */
+
+
+void SPI_PeriClockControl(SPI_RegDef_t *pSPIx, uint8_t EnorDi){
+	if (EnorDi == ENABLE){
+
+		if(pSPIx == SPI1){
+			SPI1_PCLK_EN();
+		}
+
+		else if(pSPIx == SPI2){
+			SPI2_PCLK_EN();
+		}
+
+		else if(pSPIx == SPI3){
+			SPI3_PCLK_EN();
+		}
+		else if(pSPIx == SPI4){
+			SPI4_PCLK_EN();
+		}
+
+	}
+	if (EnorDi == DISABLE){
+
+		if(pSPIx == SPI1){
+			SPI1_PCLK_DI();
+		}
+
+		if(pSPIx == SPI2){
+			SPI2_PCLK_DI();
+		}
+
+		if(pSPIx == SPI3){
+			SPI3_PCLK_DI();
+		}
+
+		if(pSPIx == SPI4){
+			SPI4_PCLK_DI();
+		}
+
+	}
+}
+
+
+/**********************************************************************************************
+ * 								SPI_Init
+ *
+ * 	@brief					   - Used to initialize the SPI Peripheral
+ *
+ *
+ * 	@param					   - pSPIHandle, the pointer to the Handler for the SPI Peripheral
+ * 	@param					   -
+ * 	@param					   -
+ *
+ *
+ * 	@return					   -
+ *
+ * 	@NOTE					   -
+ */
+void SPI_Init(SPI_Handle_t *pSPIHandle){
+
+	//Let's configure the SPI_CR1 Register
+
+	uint32_t tempreg = 0;
+
+
+	//1. Configure the device mode
+
+	//initializing the device in the SLAVE mode
+	tempreg |= pSPIHandle->SPI_Config.SPI_DeviceMode << SPI_CR1_MSTR;
+
+	//2. Define the bus for it's mode
+	if (pSPIHandle->SPI_Config.SPI_BusConfig == SPI_BUSCONGID_FD){
+
+		//Clear the bidimode
+		tempreg &= ~(1 << SPI_CR1_BIDIMODE);
+	}else if (pSPIHandle->SPI_Config.SPI_BusConfig == SPI_BUSCONGID_HD){
+		//Enable the bidimode
+		tempreg |= (1 <<SPI_CR1_BIDIMODE);
+	}else if (pSPIHandle->SPI_Config.SPI_BusConfig == SPI_BUSCONGID_SIMPLEX_RXONLY){
+		//Clear the bidimode and set the RXONLY bit
+		tempreg &= ~(1 << SPI_CR1_BIDIMODE);
+
+		tempreg |= (1<<SPI_CR1_RXONLY );
+	}
+
+	//3. Configure the SPI clock for the speed that you desire
+	tempreg |= pSPIHandle->SPI_Config.SPI_SclkSpeed << SPI_CR1_BR;
+
+	//4. Configure the DFF
+	tempreg |= pSPIHandle->SPI_Config.SPI_DFF << SPI_CR1_DFF;
+
+	//5. Configure the CPOL
+	tempreg |= pSPIHandle->SPI_Config.SPI_CPOL << SPI_CR1_CPOL;
+
+	//6.COnfigure the CPHA
+	tempreg |= pSPIHandle->SPI_Config.SPI_CPHA << SPI_CR1_CPHA;
+
+	pSPIHandle->pSPIx->CR1 |= tempreg;
+
+}
+
+uint8_t SPI_GetFlagStatus(SPI_RegDef_t *pSPIx, uint32_t FlagName){
+	if (pSPIx->SR & FlagName){
+		return FLAG_SET;
+	}
+	return FLAG_RESET;
+}
+
+
+void SPI_SendData(SPI_RegDef_t *pSPIx, uint8_t *pTxBuffer, uint32_t len){
+	while (len>0){
+		//1. Wait till the TXE is set
+		while (SPI_GetFlagStatus(pSPIx,SPI_TXE_FLAG) == FLAG_RESET){
+
+			if (pSPIx->CR1 & (1 << SPI_CR1_DFF)){
+				//This means the DFF is 16 bits
+
+				//1. Load the DATA to the DR
+				pSPIx->DR = *((uint16_t*)pTxBuffer);
+
+				//2. Decrement the length TWICE as we just sent 2 bytes of Data
+				len--;
+				len--;
+
+				//3. Increment the pointer to the TxBuffer TWICE,as we just sent 2 Bytes of data. COnverting to 16 and incrementing once works too
+				(uint16_t*)pTxBuffer++;
+			}
+			else {
+				//THis means the DFF is 8 bits
+
+				//1. Load the DATA to the DR
+				pSPIx->DR = *pTxBuffer;
+
+				//2. Decrement the length once, as we just sent 1 byte of the data
+				len--;
+
+				//3. Increment the pointer to the TxBuffer ,as we just sent 1 Byte of data
+				pTxBuffer++;
+			}
+		}
+	}
+}

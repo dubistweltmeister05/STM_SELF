@@ -1,0 +1,17 @@
+14:48:50 **** Incremental Build of configuration Debug for project MPU_Testing ****
+make -j12 all 
+arm-none-eabi-gcc "../Core/Src/mpu6050.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/mpu6050.d" -MT"Core/Src/mpu6050.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/mpu6050.o"
+arm-none-eabi-gcc -o "MPU_Testing.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\wardawg\Desktop\STM_SELF_CODES\MPU_Testing\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="MPU_Testing.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: MPU_Testing.elf
+ 
+arm-none-eabi-size   MPU_Testing.elf 
+arm-none-eabi-objdump -h -S  MPU_Testing.elf  > "MPU_Testing.list"
+   text	   data	    bss	    dec	    hex	filename
+  16688	    264	   1744	  18696	   4908	MPU_Testing.elf
+Finished building: default.size.stdout
+ 
+Finished building: MPU_Testing.list
+ 
+
+14:48:52 Build Finished. 0 errors, 0 warnings. (took 1s.219ms)
+

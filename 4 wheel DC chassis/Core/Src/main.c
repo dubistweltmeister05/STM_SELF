@@ -22,7 +22,7 @@
 
 #include "main.h"
 #include "stm32f4xx.h"
-
+#include "stm32f407xx.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -111,7 +111,7 @@ int main (void){
 		if(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)){
 
 
-			brightness=1000;
+			brightness=20;
 			//Setting PWM Capture/compare value on individual channels of the same timer
 			__HAL_TIM_SET_COMPARE(&htimer4,TIM_CHANNEL_1,brightness);
 			HAL_Delay(1);
@@ -129,7 +129,7 @@ int main (void){
 
 		else {
 			{
-				brightness=250;
+				brightness=80;
 				//Setting PWM Capture/compare value on individual channels of the same timer
 				__HAL_TIM_SET_COMPARE(&htimer4,TIM_CHANNEL_1,brightness);
 				HAL_Delay(1);
@@ -143,16 +143,9 @@ int main (void){
 				__HAL_TIM_SET_COMPARE(&htimer4,TIM_CHANNEL_4,brightness);
 				HAL_Delay(1);
 			}
-
 		}
-
 	}
-
-
 }
-
-
-
 
 /*
  * IMPLEMENTATION OF ALL USER DEFINED FUNCTIONS APART FROM THE MAIN FUNCTION
@@ -409,7 +402,7 @@ void timer3_init(void){
 void timer4_init(void){
 
 	htimer4.Instance = TIM4;
-	htimer4.Init.Period = 10000-1;
+	htimer4.Init.Period = 1000-1;
 	htimer4.Init.Prescaler = 4999;
 	if (HAL_TIM_PWM_Init(&htimer4) != HAL_OK){
 		Error_Handler();

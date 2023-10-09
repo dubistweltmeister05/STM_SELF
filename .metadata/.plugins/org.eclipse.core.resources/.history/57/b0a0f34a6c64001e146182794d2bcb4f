@@ -1,0 +1,72 @@
+/*
+ * stm32f407_spi_driver.c
+ *
+ *  Created on: Oct 6, 2023
+ *      Author: wardawg
+ */
+
+#include "stm32f407xx.h"
+#include "stm32f407_spi_driver.h"
+
+
+/**********************************************************************************************
+ * 								SPI_PeriClockControl
+ *
+ * 	@brief					   - Used to turn the clock on or off
+ *
+ *
+ * 	@param					   - pSPIx, the pointer to the regDef Structure
+ * 	@param					   - EnordDi, the ENABLE or DISABLE MACRO
+ * 	@param					   -
+ *
+ *
+ * 	@return					   -
+ *
+ * 	@NOTE					   -
+ */
+
+
+void SPI_PeriClockControl(SPI_RegDef_t *pSPIx, uint8_t EnorDi){
+	if (EnorDi == ENABLE){
+
+		if(pSPIx == SPI1){
+			SPI1_PCLK_EN();
+		}
+
+		else if(pSPIx == SPI2){
+			SPI2_PCLK_EN();
+		}
+
+		else if(pSPIx == SPI3){
+			SPI3_PCLK_EN();
+		}
+
+		else if(pSPIx == SPI4){
+			SPI4_PCLK_EN();
+		}
+		else (pSPIx == SPI5){
+			SPI5_PCLK_EN();
+		}
+
+
+	}
+	if (EnorDi == DISABLE){
+
+		if(pSPIx == SPI1){
+			SPI1_PCLK_DI();
+		}
+
+		if(pSPIx == SPI2){
+			SPI2_PCLK_DI();
+		}
+
+		if(pSPIx == SPI3){
+			SPI3_PCLK_DI();
+		}
+
+		if(pSPIx == SPI4){
+			SPI4_PCLK_DI();
+		}
+
+	}
+}

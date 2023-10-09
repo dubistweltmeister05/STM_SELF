@@ -1,0 +1,167 @@
+/*
+ * stm32f407_spi_driver.h
+ *
+ *  Created on: Oct 6, 2023
+ *      Author: wardawg
+ */
+
+#ifndef INC_STM32F407_SPI_DRIVER_H_
+#define INC_STM32F407_SPI_DRIVER_H_
+
+/*
+ * COMMENTS
+ *
+ * 1. The Master Produces a clock on the SCLK only when the MOSI line has data on it.
+ *    SO, we need to force the RXONLY bit (SPI_CR1) to HIGH to force the master to produce the SCLK.
+ * 2. Use OPType as Push Pull
+ *
+ *
+ */
+
+
+/*
+ * DEFINING THE CONFIG STRUCTURE
+ */
+
+typedef struct {
+	uint8_t SPI_DeviceMode;
+	uint8_t SPI_BusConfig;
+	uint8_t SPI_SclkSpeed;
+	uint8_t SPI_DFF;
+	uint8_t SPI_CPOL;
+	uint8_t SPI_CPHA;
+	uint8_t SPI_SSM;
+}SPI_Config_t;
+
+/*
+ * DEFINING THE HANDLE STRUCTURE
+ */
+
+typedef struct {
+	SPI_RegDef_t *pSPIx; /*This holds the SPI number for which we are coding (x = 0,1,2...) */
+	SPI_Config_t SPI_Config;
+}SPI_Handle_t;
+
+/*
+ * @SPI_DeviceMode
+ * Look for the MSTR Bit in the SPI_CR1 Register
+ */
+#define SPI_DEVICE_MODE_MASTER					1
+#define SPI_DEVICE_MODE_SLAVE					0
+
+/*
+ * @SPI_BusConfig
+ * Look for the BIDIOE(0=Rx, 1=Tx) and BIDIMODE(0=HD and the BIDIOE is Don't Care, 1=FD) bits of the SPI_CR1
+ * The Bit 10-RxONLY is used for 2-Line Unidirectional Communication
+ */
+#define SPI_BUSCONGID_FD						1
+#define SPI_BUSCONGID_HD						2
+#define SPI_BUSCONGID_SIMPLEX_RXONLY			3
+
+/*
+ * @SPI_ClockSpeed
+ */
+
+#define SPI_SCLK_SPEED_DIV_2					0
+#define SPI_SCLK_SPEED_DIV_4					1
+#define SPI_SCLK_SPEED_DIV_8					2
+#define SPI_SCLK_SPEED_DIV_16					3
+#define SPI_SCLK_SPEED_DIV_32					4
+#define SPI_SCLK_SPEED_DIV_64					5
+#define SPI_SCLK_SPEED_DIV_128					6
+#define SPI_SCLK_SPEED_DIV_256					7
+
+
+/*
+ * @SPI_DFF
+ * The frame format, found in the SPI_CR1. Defines the number of bits in one frame
+ * (by extension, the length of the shift register)
+ */
+#define SPI_DFF_8BITS							0
+#define SPI_DFF_16BITS							1
+
+
+/*
+ * @SPI_CPOL
+ */
+#define SPI_CPOL_HIGH							1
+#define SPI_CPOL_LOW							0
+
+/*
+ * @SPI_CPHA
+ */
+#define SPI_CPHA_HIGH							1
+#define SPI_CPHA_LOW							0
+
+
+/*
+ * @SPI_SSM
+ */
+#define SPI_SSM_EN								1
+#define SPI_SSM_DI								0
+
+
+
+/*
+ * Defining the FLAG MACROS
+ */
+#define SPI_TXE_FLAG 							(1 << SPI_SR_TXE)
+#define SPI_RXNE_FLAG 							(1 << SPI_SR_RXNE)
+#define SPI_BUSY_FLAG							(1 << SPI_SR_BSY)
+#define SPI_OVR_FLAG							(1 << SPI_SR_OVR)
+#define SPI_MODF_FLAG							(1 << SPI_SR_MODF)
+#define SPI_FRE_FLAG							(1 << SPI_SR_FRE)
+#define SPI_CRCERR_FLAG							(1 << SPI_SR_CRCERR)
+#define SPI_UDR_FLAG							(1 << SPI_SR_UDR)
+#define SPI_CHSIDE_FLAG							(1 << SPI_SR_CHSIDE)
+
+
+
+
+/*********************************************************************************************
+ * 							APIS Supported by the driver
+ *
+ *
+ *********************************************************************************************/
+
+
+/*
+ * peripheral clock enable-disable
+ */
+
+
+void SPI_PeriClockControl(SPI_RegDef_t *pSPIx, uint8_t EnorDi);
+
+/*
+ * Init and De-Init
+ */
+
+void SPI_Init(SPI_Handle_t *pSPIHandle);
+void SPI_DeInit(SPI_RegDef_t *pSPIx);
+
+/*
+ * Data Send And Receive
+ */
+
+void SPI_SendData(SPI_RegDef_t *pSPIx, uint8_t *pTxBuffer, uint32_t len);
+void SPI_ReceiveData(SPI_RegDef_t *pSPIx,uint8_t *pRxBuffer, uint32_t len );
+
+/*
+ * IRQ and ISR Handling
+ */
+
+void SPI_IRQInterruptConfig(uint8_t IRQNumber, uint8_t EnorDi);
+void SPI_IRQPriorityConfig(uint8_t IRQNumber, uint32_t IRQPriority);
+void SPI_IRQHandling(SPI_Handle_t *pHandle);
+
+
+
+/*
+ * other APIs
+ */
+void SPI_PeripheralControl(SPI_RegDef_t *pSPIx, uint8_t EnOrDi);
+
+void SPI_SSIConfig(SPI_RegDef_t *pSPIx, uint8_t EnOrDi);
+void SPI_SSOEConfig(SPI_RegDef_t *pSPIx, uint8_t EnOrDi);
+
+#endif /* INC_STM32F407_SPI_DRIVER_H_ */

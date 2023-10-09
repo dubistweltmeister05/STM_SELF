@@ -1,0 +1,6 @@
+1696588594930	Delete resource 'TRYING_TO_MERGE_BARE_METAL/Core/Src/main.c'
+1696588598148	Delete resource 'TRYING_TO_MERGE_BARE_METAL/Core/Inc/main.h'
+1696588602814	Delete resource 'TRYING_TO_MERGE_BARE_METAL/Core/Inc/stm32f4xx_it.h'
+1696588605601	Delete resource 'TRYING_TO_MERGE_BARE_METAL/Core/Src/stm32f4xx_hal_msp.c'
+1696588609130	Delete resource 'TRYING_TO_MERGE_BARE_METAL/Core/Src/stm32f4xx_it.c'
+1696588730289	Delete resource 'TRYING_TO_MERGE_BARE_METAL/Drivers/BARE_APP'

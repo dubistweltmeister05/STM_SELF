@@ -1,17 +1,24 @@
-20:38:55 **** Incremental Build of configuration Debug for project 4 wheel DC chassis ****
+01:42:30 **** Incremental Build of configuration Debug for project 4 wheel DC chassis ****
 make -j12 all 
-arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/stm32f407_spi_driver.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx -c -I../Core/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc -I../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/stm32f407_spi_driver.d" -MT"Core/Src/stm32f407_spi_driver.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32f407_spi_driver.o"
+../Core/Src/stm32f407_spi_driver.c: In function 'SPI_SendData':
+../Core/Src/stm32f407_spi_driver.c:144:3: warning: this 'while' clause does not guard... [-Wmisleading-indentation]
+  144 |   while (SPI_GetFlagStatus(pSPIx,SPI_TXE_FLAG) == FLAG_RESET);
+      |   ^~~~~
+../Core/Src/stm32f407_spi_driver.c:146:4: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the 'while'
+  146 |    if (pSPIx->CR1 & (1 << SPI_CR1_DFF)){
+      |    ^~
 arm-none-eabi-gcc -o "4 wheel DC chassis.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\wardawg\Desktop\STM_SELF_CODES\4 wheel DC chassis\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="4 wheel DC chassis.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 Finished building target: 4 wheel DC chassis.elf
  
 arm-none-eabi-size   4\ wheel\ DC\ chassis.elf 
 arm-none-eabi-objdump -h -S  4\ wheel\ DC\ chassis.elf  > "4 wheel DC chassis.list"
    text	   data	    bss	    dec	    hex	filename
-  11336	     20	   1924	  13280	   33e0	4 wheel DC chassis.elf
+   3100	      8	   1568	   4676	   1244	4 wheel DC chassis.elf
 Finished building: default.size.stdout
  
 Finished building: 4 wheel DC chassis.list
  
 
-20:38:57 Build Finished. 0 errors, 0 warnings. (took 1s.460ms)
+01:42:31 Build Finished. 0 errors, 1 warnings. (took 773ms)
 
